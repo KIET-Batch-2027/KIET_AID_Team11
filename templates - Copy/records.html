@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- RECORDS PAGE STYLES -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/records.css') }}">
+
+<section class="records-wrapper fade-in">
+
+    <!-- ================= HEADER ================= -->
+    <div class="records-header">
+        <h1 data-i18n="records.title">📊 Interview Records</h1>
+        <p data-i18n="records.subtitle">Track and analyze your AI interview performance</p>
+    </div>
+
+    <!-- ================= SEARCH & FILTER ================= -->
+    <div class="records-controls">
+        <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            data-i18n="records.search"
+            data-i18n-attr="placeholder"
+            placeholder="🔍 Search by date or language">
+
+        <select id="filterSelect" class="filter-select">
+            <option value="" data-i18n="records.filter">All Scores</option>
+            <option value="high" data-i18n="records.high_score">High Score (80%+)</option>
+            <option value="medium" data-i18n="records.medium_score">Medium Score (50–79%)</option>
+            <option value="low" data-i18n="records.low_score">Low Score (&lt;50%)</option>
+        </select>
+    </div>
+
+    <!-- ================= RECORDS TABLE ================= -->
+    {% if records and records|length > 0 %}
+    <div class="table-container slide-up">
+        <table class="records-table" id="recordsTable">
+            <thead>
+                <tr>
+                    <th data-i18n="records.number">#</th>
+                    <th data-i18n="records.date">Date</th>
+                    <th data-i18n="records.language">Language</th>
+                    <th data-i18n="records.feedback">Feedback</th>
+                    <th data-i18n="records.score">Score</th>
+                    <th data-i18n="records.status">Status</th>
+                    <th data-i18n="records.actions">Report</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in records %}
+                <tr data-score="{{ r.avg_score }}">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ r.date }}</td>
+                    <td>{{ r.language }}</td>
+
+                    <!-- SCORE BAR -->
+                    <td>
+                        <div class="score-wrapper">
+                            <span>{{ r.avg_score }}%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill"
+                                     style="width: {{ r.avg_score }}%;">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- STATUS -->
+                    <td>
+                        {% if r.avg_score|int >= 80 %}
+                            <span class="status success">Passed</span>
+                        {% elif r.avg_score|int >= 50 %}
+                            <span class="status warning">Average</span>
+                        {% else %}
+                            <span class="status danger">Failed</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- FEEDBACK -->
+                    <td>
+                        {% if r.details %}
+                        <details class="feedback-details">
+                            <summary>
+                                {{ r.details[:120] }}{% if r.details|length > 120 %}...{% endif %}
+                            </summary>
+                            <pre class="feedback-pre">{{ r.details }}</pre>
+                        </details>
+                        {% else %}
+                            <em>No feedback</em>
+                        {% endif %}
+                    </td>
+
+                    <!-- REPORT -->
+                    <td>
+                        <a href="/download_report" class="btn-download">
+                            Download PDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+        <!-- EMPTY STATE -->
+        <div class="no-data fade-in">
+            <p data-i18n="records.no_records">🚫 No interview records yet</p>
+            <p>Start an interview to see your performance here.</p>
+            <a href="/interview" class="btn-primary">Start Interview</a>
+        </div>
+    {% endif %}
+
+    <!-- ================= FOOTER ================= -->
+    <div class="records-footer fade-up">
+        <p>📌 Tip: Focus on improving low-score interviews for better results.</p>
+    </div>
+
+</section>
+
+<!-- ================= FILTER SCRIPT ================= -->
+<script>
+    const filterSelect = document.getElementById("filterSelect");
+    const searchInput = document.getElementById("searchInput");
+    const rows = document.querySelectorAll("#recordsTable tbody tr");
+
+    filterSelect?.addEventListener("change", filterRows);
+    searchInput?.addEventListener("keyup", filterRows);
+
+    function filterRows() {
+        const filter = filterSelect.value;
+        const search = searchInput.value.toLowerCase();
+
+        rows.forEach(row => {
+            const score = parseInt(row.dataset.score);
+            const text = row.innerText.toLowerCase();
+
+            let scoreMatch = true;
+
+            if (filter === "high") scoreMatch = score >= 80;
+            if (filter === "medium") scoreMatch = score >= 50 && score < 80;
+            if (filter === "low") scoreMatch = score < 50;
+
+            const searchMatch = text.includes(search);
+
+            row.style.display = (scoreMatch && searchMatch) ? "" : "none";
+        });
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+/* Simple chat styles compatible with light/dark themes */
+.chat-window { background: var(--bg-secondary, #fff); border-radius: 8px; }
+.chat-msg { display:block; }
+.chat-msg .meta { font-size:12px; color:var(--muted); }
+.btn-primary{ cursor:pointer }
+.btn-secondary{ cursor:pointer }
+.btn-danger{ cursor:pointer }
+@media (prefers-color-scheme: dark){
+    .chat-window{ background: rgba(255,255,255,0.02); }
+}

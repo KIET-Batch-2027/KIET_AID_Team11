@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ===================== HELP PAGE WRAPPER ===================== -->
+<section class="help-wrapper fade-in">
+
+<style>
+/* Premium help page styling to match dashboard */
+.help-wrapper { max-width: 1100px; margin: 24px auto; padding: 28px; background: rgba(255,255,255,0.9); border-radius: 14px; box-shadow: 0 20px 50px rgba(59,46,42,0.08); }
+.help-header h1 { font-size: 32px; color: #ff6b6b; margin-bottom: 4px; }
+.help-header p { color: #6b4f45; margin-bottom: 18px }
+.help-section { margin-top: 20px }
+.faq-card, .guide-card, .contact-card { background: linear-gradient(180deg,#fff,#fff); border-radius: 12px; padding: 18px; margin-bottom: 12px; box-shadow: 0 8px 24px rgba(59,46,42,0.05); }
+.faq-card h3 { margin-bottom: 8px; color: #4a2f2a }
+.guide-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px }
+.guide-card h3 { color:#ff9f6b }
+.help-footer { text-align:center; margin-top:18px; color:#7a5b4f }
+@media (max-width:900px){ .guide-grid { grid-template-columns: 1fr } }
+</style>
+
+    <!-- PAGE HEADER -->
+    <div class="help-header">
+        <h1 data-i18n="help.title">Help & Support</h1>
+        <p data-i18n="help.subtitle">Everything you need to know about using the AI Interview Trainer</p>
+    </div>
+
+    <!-- ===================== FAQ SECTION ===================== -->
+    <div class="help-section">
+
+        <h2 class="section-title" data-i18n="help.faq">Frequently Asked Questions</h2>
+
+        <div class="faq-card slide-up">
+            <h3 data-i18n="help.q1">❓ What is AI Interview Trainer?</h3>
+            <p data-i18n="help.a1">
+                AI Interview Trainer is a smart platform that helps users practice interviews using AI-generated questions, automatic scoring, and instant feedback to improve performance.
+            </p>
+        </div>
+
+        <div class="faq-card slide-up">
+            <h3 data-i18n="help.q2">🎤 How do I start an interview?</h3>
+            <p data-i18n="help.a2">
+                Go to the Interview section from the sidebar, click on Start Interview, and answer the questions presented by the AI system.
+            </p>
+        </div>
+
+        <div class="faq-card slide-up">
+            <h3 data-i18n="help.q3">🌍 What languages are supported?</h3>
+            <p data-i18n="help.a3">
+                The platform supports English, Bhojpuri, and Maithili languages.
+            </p>
+        </div>
+
+        <div class="faq-card slide-up">
+            <h3 data-i18n="help.q4">⭐ How is my performance scored?</h3>
+            <p data-i18n="help.a4">
+                Your performance is scored by AI based on answer quality, clarity, relevance, and communication skills.
+            </p>
+        </div>
+
+        <div class="faq-card slide-up">
+            <h3>📊 How is the score calculated?</h3>
+            <p>
+                Scores are generated automatically based on your answers,
+                communication clarity, and relevance using AI evaluation models.
+            </p>
+        </div>
+
+        <div class="faq-card slide-up">
+            <h3>📁 Where can I see past interview records?</h3>
+            <p>
+                All completed interviews are stored in the <strong>Records</strong>
+                section. You can review answers, scores, and feedback anytime.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- ===================== GUIDE SECTION ===================== -->
+    <div class="help-section">
+
+        <h2 class="section-title">User Guide</h2>
+
+        <div class="guide-grid">
+
+            <div class="guide-card hover-rise">
+                <h3>Step 1</h3>
+                <p>Login to your account using your credentials.</p>
+            </div>
+
+            <div class="guide-card hover-rise">
+                <h3>Step 2</h3>
+                <p>Navigate to the Interview page from the sidebar.</p>
+            </div>
+
+            <div class="guide-card hover-rise">
+                <h3>Step 3</h3>
+                <p>Answer questions honestly and clearly.</p>
+            </div>
+
+            <div class="guide-card hover-rise">
+                <h3>Step 4</h3>
+                <p>Receive instant AI feedback and score.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===================== CONTACT SECTION ===================== -->
+    <div class="help-section">
+
+        <h2 class="section-title">Contact Support</h2>
+
+        <div class="contact-card fade-up">
+            <p>
+                If you are facing any issues or need further assistance,
+                feel free to contact our support team.
+            </p>
+
+            <div class="contact-info">
+                <p>📧 Email: support@aiinterviewtrainer.com</p>
+                <p>📞 Phone: +91 90000 00000</p>
+                <p>🕒 Support Hours: 9:00 AM – 6:00 PM</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===================== FOOTER NOTE ===================== -->
+    <div class="help-footer fade-up">
+        <p>
+            💡 Tip: Practice regularly to improve your confidence and performance.
+        </p>
+    </div>
+
+</section>
+<!-- ===================== HELP PAGE END ===================== -->
+
+{% endblock %}
+

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="settings-wrapper fade-in">
+
+    <!-- PAGE HEADER -->
+    <div class="settings-header">
+        <h1 data-i18n="settings.title">Settings</h1>
+        <p data-i18n="settings.subtitle">Manage your account preferences and system options</p>
+    </div>
+
+    <div class="settings-grid">
+
+        <!-- ================= ACCOUNT SETTINGS ================= -->
+        <div class="settings-card slide-in-left">
+            <h2>👤 <span data-i18n="settings.account">Account Settings</span></h2>
+
+            <form class="settings-form" method="POST" action="/settings">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
+                <div class="form-group">
+                    <label data-i18n="settings.full_name">Full Name</label>
+                    <input type="text"
+                           name="name"
+                           value="{{ user.name if user }}"
+                           data-i18n="settings.full_name"
+                           data-i18n-attr="placeholder"
+                           placeholder="Your full name"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="settings.email">Email Address</label>
+                    <input type="email"
+                           name="email"
+                           value="{{ user.email if user }}"
+                           data-i18n="settings.email"
+                           data-i18n-attr="placeholder"
+                           placeholder="Your email"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="settings.password">Change Password</label>
+                    <input type="password"
+                           name="password"
+                           data-i18n="settings.password"
+                           data-i18n-attr="placeholder"
+                           placeholder="New password (optional)">
+                </div>
+
+                <button type="submit" class="btn-save" data-i18n="settings.save_account">
+                    💾 Save Account Changes
+                </button>
+            </form>
+        </div>
+
+        <!-- ================= INTERVIEW SETTINGS ================= -->
+        <div class="settings-card slide-in-right">
+            <h2>🎤 <span data-i18n="settings.preferences">Interview Preferences</span></h2>
+
+            <form method="POST" action="/settings">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
+                <div class="toggle-group">
+                    <span data-i18n="settings.ai_feedback">Enable AI Feedback</span>
+                    <label class="switch">
+                           <input type="checkbox"
+                               name="ai_feedback"
+                               {% if user and (user.ai_feedback|int == 1) %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-group">
+                    <span data-i18n="settings.auto_next">Auto Next Question</span>
+                    <label class="switch">
+                           <input type="checkbox"
+                               name="auto_next"
+                               {% if user and (user.auto_next|int == 1) %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-group">
+                    <span data-i18n="settings.show_hints">Show Hints</span>
+                    <label class="switch">
+                           <input type="checkbox"
+                               name="show_hints"
+                               {% if user and (user.show_hints|int == 1) %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-save" data-i18n="settings.save_preferences">
+                    💾 Save Preferences
+                </button>
+            </form>
+        </div>
+
+        <!-- ================= DANGER ZONE ================= -->
+        <div class="settings-card slide-in-right" style="border: 2px solid #fee2e2;">
+            <h2 style="color: #dc2626;" data-i18n="settings.danger_zone">⚠️ Danger Zone</h2>
+
+            <form method="POST" action="/delete-account">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
+                <p style="color: #6b7280; margin-bottom: 1rem;" data-i18n="settings.delete_warning">This action cannot be undone</p>
+
+                <button type="submit" class="btn-danger" style="width: 100%; background: #fecaca; color: #b91c1c; padding: 0.875rem; border: 1px solid #fca5a5; border-radius: 10px; font-weight: 600; cursor: pointer;" data-i18n="settings.delete_account">
+                    🗑️ Delete Account
+                </button>
+            </form>
+        </div>
+        </div>
+
+        <!-- ================= DANGER ZONE ================= -->
+        <div class="settings-card danger slide-in-right">
+            <h2>⚠️ Danger Zone</h2>
+            <p>Be careful! These actions are irreversible.</p>
+
+            <form id="deleteAccountForm" method="post" action="/delete-account">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <button type="button" class="btn-danger" onclick="confirmDelete()">🗑️ Delete Account</button>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="settings-footer fade-up">
+        <p>💡 Tip: Save changes after updating your preferences.</p>
+    </div>
+
+</section>
+
+<!-- ===================== JS ===================== -->
+<script>
+    const darkToggle = document.getElementById("darkModeToggle");
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        darkToggle.checked = true;
+    }
+
+    darkToggle.addEventListener("change", () => {
+        if (darkToggle.checked) {
+            document.body.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.body.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    });
+
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            document.getElementById('deleteAccountForm').submit();
+        }
+    }
+</script>
+
+{% endblock %}

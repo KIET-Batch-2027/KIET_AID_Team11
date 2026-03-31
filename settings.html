@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Interview Trainer - Practice interviews with AI feedback">
+    <meta name="author" content="AI Interview Trainer">
+
+    <title>AI Interview Trainer</title>
+
+    <!-- FAVICON -->
+    <link rel="icon" href="/static/favicon.ico">
+
+    <!-- ================= CORE STYLES ================= -->
+    <!-- Cache busting -->
+    <link rel="stylesheet" href="/static/css/style.css?v=2">
+    <link rel="stylesheet" href="/static/css/dark.css?v=2">
+    <link rel="stylesheet" href="/static/css/chat.css?v=1">
+
+    <!-- ================= CORE SCRIPTS ================= -->
+    <script defer src="/static/js/theme.js"></script>
+    <script defer src="/static/js/time.js"></script>
+    <style>
+        /* simple toast styles */
+        #toasts { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+        .toast { background: rgba(0,0,0,0.85); color: #fff; padding: 12px 16px; border-radius: 8px; margin-bottom: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+        .toast-success { background: #16a34a; }
+        .toast-error { background: #dc2626; }
+    </style>
+</head>
+
+<body id="app-body">
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+        <div>
+            <div class="sidebar-header">
+                <h1 data-i18n="nav.app_title">AI Interview</h1>
+                <p class="subtitle" data-i18n="nav.subtitle">Professional Trainer</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="/dashboard"
+                   class="nav-link "
+                   data-i18n="nav.dashboard">Dashboard</a>
+
+                <a href="/interview"
+                   class="nav-link "
+                   data-i18n="nav.interview">Interview</a>
+
+                <a href="/records"
+                   class="nav-link "
+                   data-i18n="nav.records">Records</a>
+
+                <a href="/settings"
+                   class="nav-link active"
+                   data-i18n="nav.settings">Settings</a>
+
+                <a href="/help"
+                   class="nav-link "
+                   data-i18n="nav.help">Help</a>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <button type="button" class="theme-toggle" onclick="toggleTheme()" data-i18n="nav.toggle_theme">
+                Toggle Dark Mode
+            </button>
+
+            <form id="logoutForm" method="post" action="/logout" style="display:inline">
+                <input type="hidden" name="csrf_token" value="JSFde4p0DhUmRnxldOXDZw">
+                <button type="submit" class="logout-btn" data-i18n="nav.logout">Logout</button>
+            </form>
+        </div>
+
+    </aside>
+
+    <!-- ================= MAIN SECTION ================= -->
+    <div class="main-section">
+
+        <header class="topbar">
+            <div class="welcome-text">
+                <h2 data-i18n="top.welcome_back">Welcome back</h2>
+                <span id="clock"></span>
+            </div>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+                <label for="langSelect" style="font-size:14px;margin-right:6px" data-i18n="nav.language">Language</label>
+                <select id="langSelect" style="padding:6px;border-radius:6px;border:1px solid #ddd">
+                    <option value="en">English</option>
+                    <option value="bho">भोजपुरी</option>
+                    <option value="mai">मैथिली</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Flash / Toast messages -->
+        <div id="toasts" aria-live="polite" aria-atomic="true">
+            
+                
+                    
+                        <div class="toast toast-success">Logged in successfully.</div>
+                    
+                
+            
+        </div>
+
+        <main class="page-content fade-in">
+            
+
+<section class="settings-wrapper fade-in">
+
+    <!-- PAGE HEADER -->
+    <div class="settings-header">
+        <h1>Settings</h1>
+        <p>Manage your account preferences and system options</p>
+    </div>
+
+    <div class="settings-grid">
+
+        <!-- ================= ACCOUNT SETTINGS ================= -->
+        <div class="settings-card slide-in-left">
+            <h2>👤 Account Settings</h2>
+
+            <form class="settings-form" method="POST" action="/settings">
+                <input type="hidden" name="csrf_token" value="JSFde4p0DhUmRnxldOXDZw">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text"
+                           name="name"
+                           value="Test User"
+                           placeholder="Your full name"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email"
+                           name="email"
+                           value="test@example.com"
+                           placeholder="Your email"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Change Password</label>
+                    <input type="password"
+                           name="password"
+                           placeholder="New password (optional)">
+                </div>
+
+                <button type="submit" class="btn-save">
+                    💾 Save Account Changes
+                </button>
+            </form>
+        </div>
+
+        <!-- ================= INTERVIEW SETTINGS ================= -->
+        <div class="settings-card slide-in-right">
+            <h2>🎤 Interview Preferences</h2>
+
+            <form method="POST" action="/settings">
+                <input type="hidden" name="csrf_token" value="JSFde4p0DhUmRnxldOXDZw">
+
+                <div class="toggle-group">
+                    <span>Enable AI Feedback</span>
+                    <label class="switch">
+                           <input type="checkbox"
+                               name="ai_feedback"
+                               checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-group">
+                    <span>Auto Next Question</span>
+                    <label class="switch">
+                           <input type="checkbox"
+                               name="auto_next"
+                               >
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-group">
+                    <span>Show Hints</span>
+                    <label class="switch">
+                           <input type="checkbox"
+                               name="show_hints"
+                               checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-save">
+                    💾 Save Preferences
+                </button>
+            </form>
+        </div>
+
+        <!-- ================= SYSTEM SETTINGS ================= -->
+        <div class="settings-card slide-in-left">
+            <h2>⚙️ System Settings</h2>
+
+            <form method="POST" action="/settings">
+                <input type="hidden" name="csrf_token" value="JSFde4p0DhUmRnxldOXDZw">
+
+                <div class="toggle-group">
+                    <span>Dark Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle" name="dark_mode" >
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-group">
+                    <span>Email Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-group">
+                    <span>Sound Effects</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div style="margin-top:12px">
+                    <button type="submit" class="btn-save">💾 Save System Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ================= DANGER ZONE ================= -->
+        <div class="settings-card danger slide-in-right">
+            <h2>⚠️ Danger Zone</h2>
+            <p>Be careful! These actions are irreversible.</p>
+
+            <form id="deleteAccountForm" method="post" action="/delete-account">
+                <input type="hidden" name="csrf_token" value="JSFde4p0DhUmRnxldOXDZw">
+                <button type="button" class="btn-danger" onclick="confirmDelete()">🗑️ Delete Account</button>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="settings-footer fade-up">
+        <p>💡 Tip: Save changes after updating your preferences.</p>
+    </div>
+
+</section>
+
+<!-- ===================== JS ===================== -->
+<script>
+    const darkToggle = document.getElementById("darkModeToggle");
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        darkToggle.checked = true;
+    }
+
+    darkToggle.addEventListener("change", () => {
+        if (darkToggle.checked) {
+            document.body.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.body.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    });
+
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            document.getElementById('deleteAccountForm').submit();
+        }
+    }
+</script>
+
+
+        </main>
+
+    </div>
+
+</div>
+<script>
+    // auto-hide toasts
+    setTimeout(()=>{
+        document.querySelectorAll('#toasts .toast').forEach(t=>t.remove());
+    }, 3500);
+</script>
+
+<!-- translation system -->
+<script src="/static/js/translator.js"></script>
+<!-- chat.js is included only on pages that need the chat (e.g. interview.html) to avoid duplicate init errors -->
+
+</body>
+</html>

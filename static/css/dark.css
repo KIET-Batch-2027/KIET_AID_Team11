@@ -1,0 +1,127 @@
+/* Premium Dark Theme — variables for easy tuning */
+body.dark {
+  --bg: #061021;            /* deep navy */
+  --panel: #0b1320;         /* slightly lighter panel */
+  --muted: #9fb0c7;         /* muted text */
+  --text: #e8f1f8;          /* primary text */
+  --accent: #4fd1c5;        /* teal accent for professionalism */
+  --accent-2: #38bdf8;      /* secondary bright cyan */
+  --glass: rgba(255,255,255,0.03);
+  --card-shadow: 0 20px 50px rgba(3,7,18,0.7);
+  --glow: 0 8px 30px rgba(255,122,89,0.14);
+
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(34,58,90,0.28), transparent 12%), var(--bg);
+  color: var(--text);
+  transition: background 300ms ease, color 250ms ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* GLOBAL PANEL STYLING */
+body.dark .topbar,
+body.dark .page-content,
+body.dark .main-section {
+  background: transparent;
+}
+
+body.dark .sidebar {
+  background: linear-gradient(180deg, #071426 0%, #051021 100%);
+  box-shadow: 10px 0 40px rgba(2,6,12,0.6);
+}
+
+body.dark .nav-link { color: var(--muted); }
+body.dark .nav-link:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+body.dark .nav-link.active { color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); background: rgba(79,209,197,0.03); }
+
+/* CARDS & CONTAINERS */
+body.dark .stat-card,
+body.dark .settings-card,
+body.dark .faq-card,
+body.dark .guide-card,
+body.dark .contact-card,
+body.dark .table-container,
+body.dark .record-card,
+body.dark .dashboard-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.006));
+  border: 1px solid rgba(255,255,255,0.03);
+  color: var(--text);
+  box-shadow: 0 18px 40px rgba(2,8,20,0.6);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 200ms ease;
+}
+
+body.dark .stat-card:hover,
+body.dark .dashboard-card:hover { transform: translateY(-6px); box-shadow: 0 36px 80px rgba(2,8,26,0.72); border-color: rgba(79,209,197,0.06); }
+
+/* TEXT HIERARCHY */
+body.dark h1, body.dark h2, body.dark h3 { color: var(--text); letter-spacing: -0.2px; }
+body.dark p, body.dark small, body.dark label { color: var(--muted); line-height:1.5 }
+
+/* Headings prominence */
+body.dark h1 { font-size: 28px; font-weight:800 }
+body.dark h2 { font-size: 20px; font-weight:700 }
+body.dark h3 { font-size: 16px; font-weight:600 }
+
+/* BUTTONS */
+body.dark .btn-primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #02111a; box-shadow: 0 10px 30px rgba(56,189,248,0.12); font-weight:700; border-radius:12px }
+body.dark .btn-secondary { background: rgba(255,255,255,0.04); color: var(--text); border: 1px solid rgba(255,255,255,0.03); }
+body.dark .btn-download { background: linear-gradient(90deg, #06b6d4, #2dd4bf); color: #02121a; padding: 8px 12px; border-radius: 10px; font-weight:600 }
+
+/* FORMS & INPUTS */
+body.dark input, body.dark textarea, body.dark select {
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.035);
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 12px;
+  outline: none;
+}
+body.dark input::placeholder, body.dark textarea::placeholder { color: rgba(230,238,248,0.45); }
+
+body.dark input:focus, body.dark textarea:focus, body.dark select:focus { box-shadow: 0 8px 30px rgba(56,189,197,0.06); border-color: rgba(56,189,197,0.12) }
+
+/* TOGGLE */
+body.dark .switch { --track:#101826; }
+body.dark .slider { background: linear-gradient(90deg,#071426,#0f2230); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+body.dark .switch input:checked + .slider { background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 6px 30px rgba(63,196,179,0.12); }
+
+/* TABLES & RECORDS */
+body.dark .records-table thead th { color: var(--muted); border-bottom: 1px solid rgba(255,255,255,0.04); font-weight:600 }
+body.dark .records-table td { border-bottom: 1px solid rgba(255,255,255,0.02); }
+
+/* DETAILS / FEEDBACK PRE */
+body.dark .feedback-details summary { cursor: pointer; color: var(--accent-2); font-weight: 700; }
+body.dark .feedback-pre { white-space: pre-wrap; color: rgba(232,241,248,0.98); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.03); }
+
+/* SCROLLBAR */
+body.dark ::-webkit-scrollbar { width: 10px; }
+body.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 8px; }
+
+/* small responsive tweaks */
+@media (max-width:900px){
+  body.dark .sidebar { width: 90px }
+}
+
+/* Interview page specific dark overrides */
+body.dark .interview-wrapper {
+  background: linear-gradient(180deg, #071226, #04101a);
+  box-shadow: 0 30px 70px rgba(2,6,12,0.6);
+  color: var(--text);
+}
+
+body.dark .question-panel,
+body.dark .answer-panel,
+body.dark .chat-panel {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.03);
+  color: var(--text);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+}
+
+body.dark .chat-window {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* ensure badges remain legible */
+body.dark .badge { background: rgba(255,255,255,0.03); color: var(--text); box-shadow:none }
+

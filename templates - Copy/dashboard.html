@@ -1,0 +1,418 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* ================= THEME ================= */
+:root {
+  --bg-main: linear-gradient(135deg, #FFDAB9, #FFE5B4); /* soft warm pastel */
+  --glass: rgba(255, 255, 255, 0.85);
+  --border: rgba(255, 255, 255, 0.5);
+  --primary: #FF6B6B;   /* coral */
+  --secondary: #FF9F6B; /* tangerine */
+  --accent: #FFD66B;    /* warm yellow */
+  --text-dark: #3b2e2a;
+  --text-muted: #5c4a42; /* slightly darker muted brown */
+  --radius: 18px;
+  --shadow: 0 30px 60px rgba(59,46,42,0.15);
+}
+
+/* AI status banner */
+.ai-warning {
+  background: #fff8e6;
+  color: #6b3e00;
+  border: 1px solid #ffe6a7;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ================= BASE ================= */
+body {
+  background: var(--bg-main);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= HEADER ================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 34px;
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.user-chip {
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+
+/* ================= STATS ================= */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 26px;
+}
+
+.stat {
+  position: relative;
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: 0 8px 20px rgba(255,170,120,0.15);
+  overflow: hidden;
+  animation: floatSlow 7s ease-in-out infinite;
+  transition: transform 0.4s ease;
+}
+
+@keyframes floatSlow {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+.stat::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+  transform: translateX(-100%);
+}
+
+.stat:hover::after {
+  animation: shine 1s ease;
+}
+
+@keyframes shine {
+  to { transform: translateX(100%); }
+}
+
+.stat:hover {
+  transform: scale(1.05);
+}
+
+.stat h4 {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--primary);
+  margin-top: 10px;
+}
+
+.stat small {
+  color: var(--text-muted);
+}
+
+/* ================= AI STAT ================= */
+.stat.ai {
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  background-size: 300% 300%;
+  animation: gradientFlow 6s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.stat.ai h4,
+.stat.ai .stat-value,
+.stat.ai small {
+  color: white;
+}
+
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 28px;
+}
+
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px;
+  box-shadow: var(--shadow);
+  transition: transform 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-12px);
+}
+
+.card h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+/* ================= FEATURES ================= */
+.features li {
+  margin: 12px 0;
+  font-size: 15px;
+  color: var(--text-muted);
+  position: relative;
+  padding-left: 22px;
+}
+
+.features li::before {
+  content: "✦";
+  color: var(--primary);
+  position: absolute;
+  left: 0;
+  font-size: 18px;
+  top: 2px;
+}
+
+/* ================= QUICK ACTIONS ================= */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.actions a {
+  padding: 18px 22px;
+  border-radius: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+
+.actions a.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  color: white;
+  box-shadow: 0 10px 25px rgba(255,107,107,0.3);
+}
+
+.actions a.btn-primary:hover {
+  box-shadow: 0 15px 30px rgba(255,107,107,0.5);
+  transform: translateY(-3px);
+}
+
+.actions a.btn-secondary {
+  background: linear-gradient(135deg, #FF7F50, #FFA500, #FFD700); /* Coral → Tangerine → Warm Yellow */
+  color: var(--text-dark);
+  box-shadow: 0 8px 20px rgba(255,159,107,0.25);
+}
+
+.actions a.btn-secondary:hover {
+  box-shadow: 0 12px 28px rgba(255,159,107,0.4);
+  transform: translateY(-3px);
+}
+
+/* ================= TIPS & RECOMMENDATIONS ================= */
+.records-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.record-card {
+  background: linear-gradient(135deg, #FFE5B4, #FFDAB9);
+  border-radius: var(--radius);
+  padding: 20px 25px 25px 50px; /* spacing to prevent text overlap with icon */
+  box-shadow: 0 10px 25px rgba(255,170,120,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.record-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(255,170,120,0.25);
+}
+
+.record-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.record-card p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.record-card::before {
+  content: "💡";
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 22px; /* slightly bigger */
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<div class="dashboard">
+
+  {% if not groq_enabled %}
+  <div class="ai-warning">⚠️ AI features disabled — GROQ_API_KEY not found. Add it in <a href="/settings">Settings</a>.</div>
+  {% endif %}
+
+  <div class="header">
+    <div>
+      <div class="title" data-i18n="dashboard.title">Dashboard</div>
+      <div class="subtitle" data-i18n="dashboard.subtitle">AI-driven interview performance overview</div>
+    </div>
+    <div class="user-chip" id="timeGreeting">Welcome</div>
+
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <h4 data-i18n="dashboard.stat_total">Total Interviews</h4>
+      <div class="stat-value">5</div>
+      <small data-i18n="dashboard.stat_attempts">Attempts</small>
+    </div>
+
+    <div class="stat">
+      <h4 data-i18n="dashboard.stat_average">Average Score</h4>
+      <div class="stat-value">0%</div>
+      <small data-i18n="dashboard.stat_performance">Overall performance</small>
+    </div>
+
+    <div class="stat">
+      <h4 data-i18n="dashboard.stat_last">Last Interview</h4>
+      <div class="stat-value" style="font-size:18px">21 Dec 2025</div>
+      <small>09:00 PM</small>
+    </div>
+
+    <div class="stat ai">
+      <h4 data-i18n="dashboard.stat_ai">AI Evaluation</h4>
+      <div class="stat-value" data-i18n="dashboard.stat_active">Active</div>
+      <small data-i18n="dashboard.stat_enabled">Smart analysis enabled</small>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3 data-i18n="dashboard.capabilities">Platform Capabilities</h3>
+      <ul class="features">
+        <li data-i18n="dashboard.cap1">AI-generated interview questions</li>
+        <li data-i18n="dashboard.cap2">Automated performance scoring</li>
+        <li data-i18n="dashboard.cap3">Interview history tracking</li>
+        <li data-i18n="dashboard.cap4">Skill improvement insights</li>
+        <li data-i18n="dashboard.cap5">Secure authenticated sessions</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="dashboard.quick_actions">Quick Actions</h3>
+      <div class="actions">
+        <a href="/interview" class="btn-primary" data-i18n="dashboard.start_interview">Start Interview</a>
+        <a href="/records" class="btn-secondary" data-i18n="dashboard.view_records">View Records</a>
+        <a href="/settings" class="btn-secondary" data-i18n="dashboard.settings">Settings</a>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 data-i18n="dashboard.tips_title">Tips & Recommendations</h3>
+    <div class="records-container">
+      <div class="record-card">
+        <h4 data-i18n="dashboard.tip1_title">Tip #1</h4>
+        <p data-i18n="dashboard.tip1_desc">Focus on concise answers. Avoid long-winded explanations during interviews.</p>
+      </div>
+      <div class="record-card">
+        <h4 data-i18n="dashboard.tip2_title">Tip #2</h4>
+        <p data-i18n="dashboard.tip2_desc">Practice problem-solving questions daily to improve your technical skills.</p>
+      </div>
+      <div class="record-card">
+        <h4 data-i18n="dashboard.tip3_title">Tip #3</h4>
+        <p data-i18n="dashboard.tip3_desc">Record yourself answering and review for clarity, tone, and confidence.</p>
+      </div>
+      <div class="record-card">
+        <h4 data-i18n="dashboard.tip4_title">Tip #4</h4>
+        <p data-i18n="dashboard.tip4_desc">Research the company before interviews and prepare 3-4 key questions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    © AI Interview Trainer · Warm Theme · Glass · Animated · Premium UI
+  </div>
+
+</div>
+
+<!-- ===== TIME BASED GREETING SCRIPT ===== -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const greetingEl = document.getElementById("timeGreeting");
+    const hour = new Date().getHours();
+
+    if (hour >= 5 && hour < 12) {
+      greetingEl.textContent = "🌅 Good Morning";
+    } else if (hour >= 12 && hour < 17) {
+      greetingEl.textContent = "🌤 Good Afternoon";
+    } else {
+      greetingEl.textContent = "🌙 Good Evening";
+    }
+  });
+</script>
+
+
+{% endblock %}
+
+

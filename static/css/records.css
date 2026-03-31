@@ -1,0 +1,193 @@
+/* ================= ROOT THEME ================= */
+:root {
+    --primary: #ff9f43;
+    --secondary: #ff6b6b;
+    --success: #1dd1a1;
+    --warning: #feca57;
+    --danger: #ee5253;
+    --dark: #2d3436;
+    --light: #fdfdfd;
+    --gray: #dfe6e9;
+}
+
+/* ================= PAGE WRAPPER ================= */
+.records-wrapper {
+    padding: 40px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* ================= HEADER ================= */
+.records-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.records-header h1 {
+    font-size: 32px;
+    color: var(--dark);
+    font-weight: 700;
+}
+
+.records-header p {
+    color: #636e72;
+    font-size: 15px;
+}
+
+/* ================= CONTROLS ================= */
+.records-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.search-input,
+.filter-select {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--gray);
+    outline: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus,
+.filter-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(255,159,67,0.2);
+}
+
+/* ================= TABLE ================= */
+.table-container {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    animation: slideUp 0.6s ease;
+}
+
+.records-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.records-table th {
+    text-align: left;
+    padding: 14px;
+    color: #636e72;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.records-table td {
+    padding: 14px;
+    border-top: 1px solid var(--gray);
+    font-size: 14px;
+}
+
+/* ================= SCORE BAR ================= */
+.score-wrapper span {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--gray);
+    border-radius: 6px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 6px;
+    animation: growBar 1s ease;
+}
+
+/* ================= STATUS ================= */
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.status.success { background: var(--success); }
+.status.warning { background: var(--warning); color: #2d3436; }
+.status.danger  { background: var(--danger); }
+
+/* ================= BUTTON ================= */
+.btn-download {
+    padding: 8px 14px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.btn-download:hover {
+    background: var(--secondary);
+    transform: scale(1.05);
+}
+
+/* ================= EMPTY STATE ================= */
+.no-data {
+    text-align: center;
+    margin-top: 60px;
+    animation: fadeIn 0.8s ease;
+}
+
+.no-data p {
+    color: #636e72;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 10px 18px;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+}
+
+/* ================= FOOTER ================= */
+.records-footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #636e72;
+    font-size: 13px;
+    animation: fadeUp 1s ease;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes growBar {
+    from { width: 0; }
+}

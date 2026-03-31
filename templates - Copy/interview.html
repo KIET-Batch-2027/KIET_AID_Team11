@@ -1,0 +1,551 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* Interview page specific styles */
+.interview-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  animation: fadeIn 0.6s ease-in;
+}
+
+.interview-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.interview-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.interview-header p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.session-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.control-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.interview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.interview-card {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.interview-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border-color: #d1d5db;
+}
+
+.interview-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.question-box {
+  background: linear-gradient(135deg, #fffbeb, #fff7ed);
+  border-left: 5px solid #fb923c;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #1f2937;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+}
+
+.question-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 1px solid #f3f4f6;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.answer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.answer-textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  resize: vertical;
+  transition: all 0.2s ease;
+  background: #fafbfc;
+}
+
+.answer-textarea:focus {
+  outline: none;
+  border-color: #fb923c;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.btn-submit {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 146, 60, 0.4);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-stop {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.875rem 1.5rem;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-stop:hover {
+  background: #fecaca;
+  border-color: #fca5a5;
+  transform: translateY(-2px);
+}
+
+/* Live Chat Panel - Full Width Below */
+.live-chat-section {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 2rem;
+}
+
+.live-chat-section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chat-window {
+  height: 360px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.5rem;
+  background: #fafbfc;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chat-msg {
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-controls {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.chat-input {
+  padding: 0.875rem 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: #fb923c;
+  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+}
+
+.chat-btn {
+  padding: 0.875rem 1.25rem;
+  background: #fb923c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.chat-btn:hover {
+  background: #f97316;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+}
+
+.chat-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chat-footer {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 10px;
+}
+
+.chat-status {
+  font-size: 0.9rem;
+  color: #6b7280;
+  flex: 1;
+}
+
+.tts-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.tts-toggle input {
+  cursor: pointer;
+  accent-color: #fb923c;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .interview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .interview-wrapper {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .interview-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .interview-card {
+    padding: 1.5rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-submit, .btn-stop {
+    min-width: 100%;
+  }
+  
+  .chat-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+<section class="interview-wrapper">
+    <!-- Header -->
+    <div class="interview-header">
+        <h1 data-i18n="interview.title">AI Interview Session</h1>
+        <p data-i18n="interview.subtitle">Practice your interview skills with AI feedback</p>
+        
+        <!-- Language & Round Selection (Only before interview starts) -->
+        {% if current_q == 1 %}
+        <div class="control-section" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+                <!-- Language Selection -->
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: #374151;" data-i18n="interview.change_lang">Change Language:</label>
+                    <select name="language" style="width: 100%; padding: 0.75rem; border: 1.5px solid #d1d5db; border-radius: 8px; font-size: 1rem;" onchange="location.href='/interview?language=' + this.value + '&round={{ round_type }}'">
+                        <option value="English" {% if language == 'English' %}selected{% endif %}>English</option>
+                        <option value="Bhojpuri" {% if language == 'Bhojpuri' %}selected{% endif %}>भोजपुरी</option>
+                        <option value="Maithili" {% if language == 'Maithili' %}selected{% endif %}>मैथिली</option>
+                    </select>
+                </div>
+                
+                <!-- Round Selection -->
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">Round Type:</label>
+                    <select name="round" style="width: 100%; padding: 0.75rem; border: 1.5px solid #d1d5db; border-radius: 8px; font-size: 1rem;" onchange="location.href='/interview?language={{ language }}&round=' + this.value">
+                        <option value="HR" {% if round_type == 'HR' %}selected{% endif %}>HR</option>
+                        <option value="Technical" {% if round_type == 'Technical' %}selected{% endif %}>Technical</option>
+                        <option value="Behavioral" {% if round_type == 'Behavioral' %}selected{% endif %}>Behavioral</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Current Session Info (Always shown) -->
+        <div class="session-controls">
+            <span class="control-badge">
+                <span data-i18n="interview.language_label">Language:</span>
+                <strong id="currentLang">{{ language }}</strong>
+            </span>
+            <span class="control-badge">
+                <span data-i18n="interview.round_label">Round:</span>
+                <strong>{{ round_type }}</strong>
+            </span>
+        </div>
+    </div>
+
+    <!-- Main Grid: Question & Answer -->
+    <div class="interview-grid">
+        <!-- Left: Question Panel -->
+        <div class="interview-card">
+            <h2 data-i18n="interview.question_heading">❓ Question</h2>
+            <div class="question-box">{{ question }}</div>
+            <div class="question-meta">
+                <span>
+                    <strong data-i18n="interview.question_count">Question</strong>
+                    <strong>{{ current_q }}</strong>
+                    <span data-i18n="interview.of">of</span>
+                    <strong>{{ total_q }}</strong>
+                </span>
+                <span id="timer" style="color: #ef4444; font-weight: 600;">⏱ 0s</span>
+            </div>
+        </div>
+
+        <!-- Right: Answer Panel -->
+        <div class="interview-card">
+            <h2 data-i18n="interview.your_answer">✍️ Your Answer</h2>
+            <form method="post" class="answer-section">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="hidden" name="elapsed" id="elapsedSec" value="0">
+
+                <textarea 
+                    name="answer"
+                    class="answer-textarea"
+                    data-i18n="interview.placeholder"
+                    data-i18n-attr="placeholder"
+                    required
+                    placeholder="Type your answer here..."></textarea>
+
+                <div class="action-buttons">
+                    <button type="submit" name="action" value="next" class="btn-submit" data-i18n="interview.submit_next">
+                        ➡️ Submit & Next
+                    </button>
+                    <button type="submit" name="action" value="stop" class="btn-stop" data-i18n="interview.stop">
+                        ⛔ Stop
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Live Chat Section (Full Width) -->
+    <div class="live-chat-section">
+        <h2 data-i18n="interview.live_chat">🤖 Live AI Chat</h2>
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.8rem;flex-wrap:wrap;">
+            <label for="chatLangSelect" style="font-size:0.92rem;font-weight:600;color:#374151;">Chat Language:</label>
+            <select id="chatLangSelect" style="padding:0.45rem 0.6rem;border:1.5px solid #d1d5db;border-radius:8px;font-size:0.92rem;">
+                <option value="English" {% if language == 'English' %}selected{% endif %}>English</option>
+                <option value="Bhojpuri" {% if language == 'Bhojpuri' %}selected{% endif %}>भोजपुरी</option>
+                <option value="Maithili" {% if language == 'Maithili' %}selected{% endif %}>मैथिली</option>
+            </select>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <!-- Messages appended here -->
+        </div>
+
+        <div class="chat-controls">
+            <input 
+                id="chatInput" 
+                type="text" 
+                class="chat-input"
+                data-i18n="interview.placeholder"
+                data-i18n-attr="placeholder"
+                placeholder="Type your message..." />
+            <button id="sendBtn" class="chat-btn" data-i18n="interview.send">Send</button>
+            <button id="micBtn" class="chat-btn" title="Use microphone" style="background:#6b7280;padding:0.875rem 1rem">🎙️</button>
+        </div>
+
+        <div class="chat-footer">
+            <div>
+                <button id="startChatBtn" class="chat-btn" data-i18n="interview.start">Start Chat</button>
+                <button id="stopChatBtn" class="chat-btn" style="background:#ef4444;display:none">Stop Chat</button>
+            </div>
+            <div class="chat-status" id="chatStatus"></div>
+            <label class="tts-toggle">
+                <input id="ttsToggle" type="checkbox">
+                <span data-i18n="interview.tts_label">Enable Voice Output</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;align-items:center;justify-content:center;color:#fff;flex-direction:column;gap:1rem">
+    <div style="font-size:20px">Processing answer…</div>
+    <div id="timer2" style="font-size:16px">0s</div>
+</div>
+
+<script>
+    // Make interview page language reactive
+    (function() {
+        const langDisplay = document.getElementById('currentLang');
+        if (langDisplay && window._translator && window._translator.onLanguageChange) {
+            // Update display when language changes
+            window._translator.onLanguageChange((langCode) => {
+                const langMap = {en: 'English', bho: 'Bhojpuri', mai: 'Maithili'};
+                langDisplay.textContent = langMap[langCode] || 'English';
+            });
+        }
+    })();
+    
+    // Timer logic
+    const form = document.querySelector('form[method="post"]');
+    let startTime = Date.now();
+    let timerInterval = null;
+
+    function startTimer(){
+        startTime = Date.now();
+        timerInterval = setInterval(()=>{
+            const s = Math.floor((Date.now()-startTime)/1000);
+            document.getElementById('timer').textContent = '⏱ ' + s + 's';
+            document.getElementById('timer2').textContent = s + 's';
+            document.getElementById('elapsedSec').value = s;
+        }, 1000);
+    }
+
+    function stopTimer(){
+        clearInterval(timerInterval);
+    }
+
+    form.addEventListener('submit', (e)=>{
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        startTimer();
+        const btns = form.querySelectorAll('button[type="submit"]');
+        btns.forEach(b=>{ b.disabled = true; b.style.opacity = 0.7; });
+    });
+
+    document.addEventListener('DOMContentLoaded', ()=> startTimer());
+
+    // Prevent double-post
+    document.querySelectorAll('form[method="post"]').forEach(form=>{
+        form.addEventListener('submit', (e)=>{
+            const btns = form.querySelectorAll('button[type="submit"]');
+            btns.forEach(b=>{ b.disabled = true; b.style.opacity = 0.7; });
+        });
+    });
+
+    window.__CHAT_CONTEXT = {
+        language: '{{ language }}',
+        round: '{{ round_type }}'
+    };
+</script>
+
+<script defer src="{{ url_for('static', filename='js/chat.js') }}?v=6"></script>
+
+{% endblock %}
